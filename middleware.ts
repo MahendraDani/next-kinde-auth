@@ -1,17 +1,25 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
-/**
- *
- * TODO
- * Use this middleware to check the auth status of a user who lands on any protected route add them to database
- */
-export function middleware(request: NextRequest) {
-  console.log("MIDDLEWARE working");
+export async function middleware(request: NextRequest) {
   const pathname = request.url.split(":3000")[1];
-  console.log(pathname);
-  // return NextResponse.redirect(new URL("/home", request.url));
+  const { isAuthenticated, getUser } = getKindeServerSession();
+  const isAuthed = await isAuthenticated();
+  if (!isAuthed) {
+    return NextResponse.redirect("http://localhost:3000");
+  }
+
+  if (pathname === "/onboard") {
+    const user = await getUser();
+    const response = await fetch(`http://localhost:3000/api/user/${user?.id}`, {
+      method: "GET",
+    });
+    if (response.status === 200) {
+      return NextResponse.redirect("http://localhost:3000/dashboard");
+    }
+  }
 }
 export const config = {
-  matcher: ["/dashboard"],
+  matcher: ["/dashboard", "/onboard"],
 };
