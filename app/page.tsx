@@ -1,12 +1,9 @@
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
-
-
 export default function Home() {
   return (
-    <main className='text-sky-400'>
-      <p>Hello world</p>
-      <Button>Click me</Button>
+    <main className=''>
+      <div className='flex flex-col gap-4 justify-between'>
+        <p>Landing page of the website</p>
+      </div>
     </main>
   )
 }
