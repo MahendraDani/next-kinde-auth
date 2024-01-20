@@ -13,11 +13,19 @@ export default async function OnBoardOrg() {
   const user = await getUser();
 
   if (user) {
-    const existingOrg = await findOrg(user.id);
+    const existingOrg = await prisma.organization.findUnique({
+      where: {
+        org_id: user.id
+      }
+    })
     if (existingOrg) {
       redirect("/dashboard")
     }
-    const existingUser = await findUser(user.id);
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        id: user.id
+      }
+    })
     if (existingUser && existingUser.role === "INDIVIDUAL") {
       redirect("/dashboard")
 

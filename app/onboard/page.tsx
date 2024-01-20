@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { onBoardUser } from "@/lib/actions/user/onBoardUser"
+import { prisma } from "@/lib/prisma"
 import { findUser } from "@/lib/services/user/findUser"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { redirect } from "next/navigation"
@@ -20,7 +21,11 @@ export default async function OnboardPage() {
   const user = await getUser()
 
   if (user) {
-    const existingUser = await findUser(user.id);
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        id: user.id
+      }
+    })
     if (existingUser) {
       redirect("/dashboard");
     }
