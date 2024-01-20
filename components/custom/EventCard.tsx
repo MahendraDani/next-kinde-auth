@@ -9,6 +9,7 @@ import {
 import { Button } from "../ui/button"
 import { Event } from "@prisma/client"
 import Image from "next/image"
+import Link from "next/link"
 
 export const EventCard = (props: Event) => {
   return (
@@ -29,7 +30,9 @@ export const EventCard = (props: Event) => {
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">Join</Button>
+        <Link href={`/events/${props.event_id}`} className="w-full">
+          <Button className="w-full">Join</Button>
+        </Link>
       </CardFooter>
     </Card>
   )
