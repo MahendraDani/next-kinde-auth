@@ -13,7 +13,7 @@ import Link from "next/link"
 
 export const EventCard = (props: Event) => {
   return (
-    <Card className="min-w-[25rem]">
+    <Card className="w-[25rem]">
       <CardHeader>
         <CardTitle>{props.event_name}</CardTitle>
         <Image className="w-full text-center rounded-md" src={"/sample.jpg"} width={"300"} height={"400"} alt="Event Image" />

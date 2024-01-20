@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { Event } from "@prisma/client"
+import { revalidatePath } from "next/cache"
 
 export type EventProps = Pick<Event, "organizer_id" | "address" | "city" | "state" | "country" | "pincode" | "end_date" | "start_date" | "event_name" | "event_description">
 export const createEvent = async (props: EventProps) => {
@@ -18,6 +19,7 @@ export const createEvent = async (props: EventProps) => {
         end_date: props.end_date,
       }
     })
+    revalidatePath("/events")
     return response;
   } catch (error) {
     console.log("Some error creating error", error)
