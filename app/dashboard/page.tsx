@@ -1,6 +1,4 @@
-import { Navbar } from "@/components/custom/Navbar";
 
-import { useState } from "react"
 export default function DashboardPage() {
   return (
     <>
