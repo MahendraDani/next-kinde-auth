@@ -5,26 +5,21 @@ import { UserType } from "@/lib/types";
 import { redirect } from "next/navigation";
 
 export const onBoardUser = async (formData: FormData) => {
-  const first_name = formData.get("first_name");
-  const last_name = formData.get("last_name");
-  const id = formData.get("id");
-  const role = formData.get("role");
-  const email = formData.get("email");
-  const profile_image = formData.get("profile_image");
-  const response = await fetch("http://localhost:3000/api/user", {
-    method: "POST",
-    body: JSON.stringify({
-      id,
-      first_name,
-      last_name,
-      role,
-      email,
-      profile_image,
-    }),
-  });
-  if (role === "INDIVIDUAL") {
-    redirect("/dashboard");
-  } else {
-    redirect("/onboard/org");
+  try {
+    const role = formData.get("role");
+    const user = await createUser({
+      id: formData.get("id") as string,
+      first_name: formData.get("first_name") as string,
+      last_name: formData.get("last_name") as string,
+      email: formData.get("email") as string,
+      role: role as UserType,
+    });
+    if (role === "INDIVIDUAL") {
+      redirect("/dashboard");
+    } else {
+      redirect("/onboard/org");
+    }
+  } catch (error) {
+    console.log("Some error in creating user", error);
   }
 };
