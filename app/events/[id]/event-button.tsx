@@ -19,9 +19,9 @@ export const EventButton = async ({ event_id }: { event_id: string }) => {
   }
   return (
     <div>
-      {isOrganizingOrg ? <div className="flex justify-start items-center gap-3">
-        <Button>Edit</Button>
-        <Button variant={"destructive"}>Delete</Button>
+      {isOrganizingOrg ? <div className="py-2 flex flex-col justify-start items-start gap-2">
+        <Button className="w-24 text-center">Edit</Button>
+        <Button variant={"destructive"} className="w-24 text-center">Delete</Button>
       </div> : <Button>Register</Button>}
     </div>
   )
