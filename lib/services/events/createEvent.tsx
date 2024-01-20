@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import { Event } from "@prisma/client"
-import { revalidatePath } from "next/cache"
 
-export const createEvent = async (props: Pick<Event, "organizer_id" | "address" | "city" | "state" | "country" | "pincode" | "end_date" | "start_date" | "event_name" | "event_description">) => {
+export type EventProps = Pick<Event, "organizer_id" | "address" | "city" | "state" | "country" | "pincode" | "end_date" | "start_date" | "event_name" | "event_description">
+export const createEvent = async (props: EventProps) => {
   try {
     const response = await prisma.event.create({
       data: {
