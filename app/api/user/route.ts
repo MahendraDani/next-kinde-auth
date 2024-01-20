@@ -18,7 +18,6 @@ export const POST = async (req: Request) => {
     first_name,
     last_name,
     email,
-    profile_image,
     role,
   });
 

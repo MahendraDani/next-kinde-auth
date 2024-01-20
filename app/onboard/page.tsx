@@ -1,4 +1,3 @@
-"use client";
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -11,35 +10,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs"
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
-// import { signupUser } from "@/lib/actions/user/signupUser"
-// import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
+import { onBoardUser } from "@/lib/actions/user/onBoardUser"
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 
-export default function OnboardPage() {
-  // const { getUser } = getKindeServerSession()
-  // const user = await getUser();
-  const [role, setRole] = useState<string>("");
-  const { user } = useKindeBrowserClient();
-  const router = useRouter();
-
-  const handleCreateUser = async (e: FormEvent) => {
-    e.preventDefault();
-    const response = await fetch("http://localhost:3000/api/user", {
-      method: "POST",
-      body: JSON.stringify({
-        id: user?.id,
-        first_name: user?.given_name,
-        last_name: user?.family_name,
-        email: user?.email,
-        profile_image: user?.picture ? user.picture : "",
-        role: role,
-      })
-    })
-    response.status === 201 ? router.push("/dashboard") : alert("You were not supposed to send this request again man!")
-
-  }
+export default async function OnboardPage() {
+  const { getUser } = getKindeServerSession()
+  const user = await getUser()
   return (
     <div className="w-full h-[80vh] flex justify-center items-center">
       <Card className="w-[20rem]">
@@ -48,10 +24,10 @@ export default function OnboardPage() {
           <CardDescription>You can set your role as individual user or organization in our application</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleCreateUser} className="flex justify-start items-start flex-col gap-4">
+          <form action={onBoardUser} className="flex justify-start items-start flex-col gap-4">
             <div className="w-full">
               <Label htmlFor="role">Your role</Label>
-              <Select name="role" required defaultValue="INDIVIDUAL" onValueChange={(value: string) => { setRole(value) }}>
+              <Select name="role" required defaultValue="INDIVIDUAL">
                 <SelectTrigger id="role" >
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>

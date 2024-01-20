@@ -1,21 +1,14 @@
+"use server";
 import { prisma } from "@/lib/prisma";
+import { User } from "@prisma/client";
 
-interface CreateUserParams {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  role: string;
-  profile_image?: string;
-}
 export const createUser = async ({
   id,
   first_name,
   last_name,
   email,
   role,
-  profile_image,
-}: CreateUserParams) => {
+}: Pick<User, "id" | "first_name" | "last_name" | "email" | "role">) => {
   const data = await prisma.user.create({
     data: {
       id,
@@ -23,7 +16,7 @@ export const createUser = async ({
       last_name,
       email,
       role,
-      profile_image,
+      profile_image: "",
     },
   });
   return data;
