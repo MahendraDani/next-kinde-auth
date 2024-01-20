@@ -9,17 +9,7 @@ export async function middleware(request: NextRequest) {
   if (!isAuthed) {
     return NextResponse.redirect("http://localhost:3000");
   }
-
-  if (pathname === "/onboard") {
-    const user = await getUser();
-    const response = await fetch(`http://localhost:3000/api/user/${user?.id}`, {
-      method: "GET",
-    });
-    if (response.status === 200) {
-      return NextResponse.redirect("http://localhost:3000/dashboard");
-    }
-  }
 }
 export const config = {
-  matcher: ["/dashboard", "/onboard"],
+  matcher: ["/dashboard", "/onboard", "/onboard/org"],
 };

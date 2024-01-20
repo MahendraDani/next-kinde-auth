@@ -11,11 +11,20 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { onBoardUser } from "@/lib/actions/user/onBoardUser"
+import { findUser } from "@/lib/services/user/findUser"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
+import { redirect } from "next/navigation"
 
 export default async function OnboardPage() {
   const { getUser } = getKindeServerSession()
   const user = await getUser()
+
+  if (user) {
+    const existingUser = await findUser(user.id);
+    if (existingUser) {
+      redirect("/dashboard");
+    }
+  }
   return (
     <div className="w-full h-[80vh] flex justify-center items-center">
       <Card className="w-[20rem]">

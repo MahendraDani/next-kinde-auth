@@ -1,8 +1,8 @@
 import { createUser } from "@/lib/services/user/createUser";
 import { findUser } from "@/lib/services/user/findUser";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (req: Request) => {
+export const POST = async (req: NextRequest) => {
   const { id, first_name, last_name, email, profile_image, role } =
     await req.json();
 

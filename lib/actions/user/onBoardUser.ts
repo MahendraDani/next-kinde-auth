@@ -10,11 +10,6 @@ export const onBoardUser = async (formData: FormData) => {
   const id = formData.get("id");
   const role = formData.get("role");
   const email = formData.get("email");
-  console.log(first_name);
-  console.log(last_name);
-  console.log(id);
-  console.log(role);
-  console.log(email);
   const profile_image = formData.get("profile_image");
   const response = await fetch("http://localhost:3000/api/user", {
     method: "POST",
@@ -27,5 +22,9 @@ export const onBoardUser = async (formData: FormData) => {
       profile_image,
     }),
   });
-  redirect("/dashboard");
+  if (role === "INDIVIDUAL") {
+    redirect("/dashboard");
+  } else {
+    redirect("/onboard/org");
+  }
 };
