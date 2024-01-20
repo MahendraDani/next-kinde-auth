@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { onBoardOrg } from "@/lib/actions/org/onBoardOrg";
 import { prisma } from "@/lib/prisma";
 import { findOrg } from "@/lib/services/org/findOrg";
+import { findUser } from "@/lib/services/user/findUser";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
 
@@ -12,15 +13,18 @@ export default async function OnBoardOrg() {
   const user = await getUser();
 
   if (user) {
-    const existingOrg = await prisma.organization.findUnique({
-      where: {
-        org_id: user.id
-      }
-    })
+    const existingOrg = await findOrg(user.id);
     if (existingOrg) {
       redirect("/dashboard")
     }
+    const existingUser = await findUser(user.id);
+    if (existingUser && existingUser.role === "INDIVIDUAL") {
+      redirect("/dashboard")
+
+    }
   }
+
+
   return (
     <div className="w-full mt-24 h-[80vh] grid place-content-center">
       <Card className="w-[30rem]">
