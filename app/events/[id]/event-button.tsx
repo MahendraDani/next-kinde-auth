@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { prisma } from "@/lib/prisma";
+import { getEventOrganizer } from "@/lib/services/events/getEventOrganizer";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 
 export const EventButton = async ({ event_id }: { event_id: string }) => {
@@ -11,16 +11,7 @@ export const EventButton = async ({ event_id }: { event_id: string }) => {
 
   // Prisma query to join events and organiztion table to check whether the current user is the person who created the event
   if (user) {
-    const response = await prisma.organization.findUnique({
-      where: {
-        org_id: user.id,
-        events: {
-          some: {
-            event_id
-          }
-        }
-      }
-    })
+    const response = await getEventOrganizer({ org_id: user.id, event_id })
     if (response) {
       data = response;
       isOrganizingOrg = true;

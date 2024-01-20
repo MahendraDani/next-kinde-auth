@@ -26,7 +26,7 @@ export default async function EventsPage() {
   const events = await getAllEvents();
   return (
     <div className="w-full p-16">
-      <div className="py-4">
+      <div className="py-4 w-full text-center">
         {isAuthUserOrg && <CreateEventForm org_id={org?.org_id as string} />}
       </div>
       <div className="w-full flex flex-rol flex-wrap justify-evenly items-center gap-4">
