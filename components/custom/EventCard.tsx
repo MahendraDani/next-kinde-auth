@@ -17,7 +17,7 @@ export const EventCard = (props: Event) => {
       <CardHeader>
         <CardTitle>{props.event_name}</CardTitle>
         <Image className="w-full text-center rounded-md" src={"/sample.jpg"} width={"300"} height={"400"} alt="Event Image" />
-        <CardDescription>{props.event_description}</CardDescription>
+        <CardDescription className="max-h-[10rem] truncate">{props.event_description}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="w-full flex justify-start items-center gap-2">

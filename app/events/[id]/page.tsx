@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { getEventById } from "@/lib/services/events/getEventById";
 import Image from "next/image";
 import { EventButton } from "./event-button";
+import { Event } from "@prisma/client";
 
 interface EventPageParams {
   params: {
@@ -21,7 +22,7 @@ export default async function EventPage({ params }: EventPageParams) {
       <p>State : {event?.state}</p>
       <p>Country : {event?.country}</p>
       {/* <Button>Register</Button> */}
-      <EventButton event_id={event?.event_id as string} />
+      <EventButton event={event as Event} />
     </div>
   )
 }

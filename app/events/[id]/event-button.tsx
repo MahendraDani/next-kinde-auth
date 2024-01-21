@@ -14,8 +14,12 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Input } from "@/components/ui/input";
 import { deleteEventAction } from "@/lib/actions/events/deleteEventAction";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { FormTextInput } from "@/components/custom/FormTextInput";
+import { Event } from "@prisma/client";
+import { updateEventAction } from "@/lib/actions/events/updateEventAction";
 
-export const EventButton = async ({ event_id }: { event_id: string }) => {
+export const EventButton = async ({ event }: { event: Event }) => {
   const { getUser } = getKindeServerSession()
   const user = await getUser();
 
@@ -24,7 +28,7 @@ export const EventButton = async ({ event_id }: { event_id: string }) => {
 
   // Prisma query to join events and organiztion table to check whether the current user is the person who created the event
   if (user) {
-    const response = await getEventOrganizer({ org_id: user.id, event_id })
+    const response = await getEventOrganizer({ org_id: user.id, event_id: event.event_id })
     if (response) {
       data = response;
       isOrganizingOrg = true;
@@ -33,8 +37,8 @@ export const EventButton = async ({ event_id }: { event_id: string }) => {
   return (
     <div>
       {isOrganizingOrg ? <div className="py-2 flex flex-col justify-start items-start gap-2">
-        <Button className="w-24 text-center">Edit</Button>
-        <DeleteButton event_id={event_id} />
+        <EditButton event={event} />
+        <DeleteButton event_id={event.event_id} />
       </div> : <Button>Register</Button>}
     </div>
   )
@@ -64,5 +68,45 @@ const DeleteButton = async ({ event_id }: { event_id: string }) => {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+  )
+}
+
+
+const EditButton = async ({ event }: { event: Event; }) => {
+  return (
+    <div>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline">Edit</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[35rem]">
+          <DialogHeader>
+            <DialogTitle>Edit event</DialogTitle>
+          </DialogHeader>
+          <div>
+            <form action={updateEventAction} className="flex justify-start items-start flex-col gap-4">
+              {/* <input className="hidden" name="org_id" defaultValue={user?.id} /> */}
+              <FormTextInput label="Event Name" name="event_name" placeholder="Go Green" defaultValue={event.event_name} />
+              <FormTextInput label="Event Description" name="event_description" placeholder="We save enviornment by ..." defaultValue={event.event_description} />
+              <FormTextInput label="Address" name="address" placeholder="123 Baker Street" defaultValue={event.address} />
+              <div className="w-full flex justify-between items-center gap-4">
+                <FormTextInput label="City" name="city" placeholder="Bhopal" defaultValue={event.city} />
+                <FormTextInput label="Pincode" name="pincode" placeholder="445202" defaultValue={event.pincode} />
+              </div>
+              <div className="w-full flex justify-between items-center gap-4">
+                <FormTextInput label="State" name="state" placeholder="Madhya Pradesh" defaultValue={event.state} />
+                <FormTextInput label="Country" name="country" placeholder="India" defaultValue={event.country} />
+              </div>
+              <div className="w-full flex justify-between items-center gap-4">
+                <Input required type="datetime-local" name="start_date" defaultValue={event.start_date?.toLocaleString()} />
+                <Input required type="datetime-local" name="end_date" defaultValue={event.end_date?.toLocaleString()} />
+              </div>
+              <Input name="event_id" className="hidden" defaultValue={event.event_id} />
+              <Button type="submit" className="w-full">Edit Event</Button>
+            </form>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
   )
 }

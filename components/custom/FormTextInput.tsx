@@ -5,12 +5,14 @@ interface FormTextInputProps {
   label: string
   name: string
   placeholder?: string
+  defaultValue?: string | number
+  value?: string | number
 }
-export const FormTextInput = ({ label, name, placeholder }: FormTextInputProps) => {
+export const FormTextInput = ({ label, name, placeholder, defaultValue, value }: FormTextInputProps) => {
   return (
     <div className="w-full flex flex-col justify-start items-start gap-2">
       <Label>{label}</Label>
-      <Input name={name} placeholder={placeholder} />
+      <Input name={name} placeholder={placeholder} defaultValue={defaultValue} value={value} />
     </div>
   )
 }
