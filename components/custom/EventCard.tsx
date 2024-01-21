@@ -10,8 +10,18 @@ import { Button } from "../ui/button"
 import { Event } from "@prisma/client"
 import Image from "next/image"
 import Link from "next/link"
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
+import { getRegistrant } from "@/lib/services/events/getRegistrant"
 
-export const EventCard = (props: Event) => {
+export const EventCard = async (props: Event) => {
+
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  const isRegisteredAlready = await getRegistrant({
+    event_id: props.event_id,
+    user_id: user?.id as string,
+  })
   return (
     <Card className="w-[25rem]">
       <CardHeader>
@@ -29,9 +39,16 @@ export const EventCard = (props: Event) => {
           <p>{props.end_date?.toLocaleString()}</p>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex flex-col justify-start items-start gap-1">
+        {isRegisteredAlready && (
+          <div>
+            <p className="text-green-400 w-full text-center font-mono">Registered </p>
+          </div>
+        )}
         <Link href={`/events/${props.event_id}`} className="w-full">
-          <Button className="w-full">Join</Button>
+          {
+            !isRegisteredAlready ? <Button className="w-full">Join</Button> : <Button className="w-full">View Details</Button>
+          }
         </Link>
       </CardFooter>
     </Card>

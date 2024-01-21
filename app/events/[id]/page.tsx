@@ -21,6 +21,7 @@ export default async function EventPage({ params }: EventPageParams) {
       <p>City : {event?.city}</p>
       <p>State : {event?.state}</p>
       <p>Country : {event?.country}</p>
+      <p>Total Registered : {event?.registrants_count}</p>
       {/* <Button>Register</Button> */}
       <EventButton event={event as Event} />
     </div>

@@ -72,10 +72,11 @@ model Event_Images{
 }
 
 model Attendees{
-  id String @id @default(cuid())
+  id String @id @unique
   event_id String
   user_id String
   is_present Boolean @default(false)
+  registered_at DateTime @db.Timestamp() @default(now())
   event Event @relation(fields: [event_id],references: [event_id],onDelete: Cascade)
   user User @relation(fields: [user_id],references: [id],onDelete: Cascade)
 }

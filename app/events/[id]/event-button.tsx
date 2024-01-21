@@ -18,6 +18,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { FormTextInput } from "@/components/custom/FormTextInput";
 import { Event } from "@prisma/client";
 import { updateEventAction } from "@/lib/actions/events/updateEventAction";
+import { getRegistrant } from "@/lib/services/events/getRegistrant";
+import { registerToEventAction } from "@/lib/actions/events/registerToEventAction";
 
 export const EventButton = async ({ event }: { event: Event }) => {
   const { getUser } = getKindeServerSession()
@@ -39,12 +41,27 @@ export const EventButton = async ({ event }: { event: Event }) => {
       {isOrganizingOrg ? <div className="py-2 flex flex-col justify-start items-start gap-2">
         <EditButton event={event} />
         <DeleteButton event_id={event.event_id} />
-      </div> : <Button>Register</Button>}
+      </div> : <RegisterButton event_id={event.event_id} user_id={user?.id as string} />}
     </div>
   )
 }
 
 
+
+const RegisterButton = async ({ event_id, user_id }: { event_id: string; user_id: string; }) => {
+  const isRegisteredAlready = await getRegistrant({ event_id, user_id });
+  return (
+    <div>
+      {isRegisteredAlready ? <p className="text-green-400">You are already registered for the Event</p> : (
+        <form action={registerToEventAction}>
+          <Input name="event_id" className="hidden" value={event_id} />
+          <Input name="user_id" className="hidden" value={user_id} />
+          <Button type="submit">Register</Button>
+        </form>
+      )}
+    </div>
+  )
+}
 const DeleteButton = async ({ event_id }: { event_id: string }) => {
   return (
     <AlertDialog>
