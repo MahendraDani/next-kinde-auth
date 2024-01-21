@@ -12,6 +12,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { getRegistrant } from "@/lib/services/events/getRegistrant"
+import { getEventOrganizerId } from "@/lib/services/events/getEventOrganizerId"
 
 export const EventCard = async (props: Event) => {
 
@@ -22,6 +23,8 @@ export const EventCard = async (props: Event) => {
     event_id: props.event_id,
     user_id: user?.id as string,
   })
+  const eventOrganizerId = await getEventOrganizerId({ event_id: props.event_id })
+  const isEventOrganizer = eventOrganizerId === user?.id;
   return (
     <Card className="w-[25rem]">
       <CardHeader>
@@ -47,7 +50,7 @@ export const EventCard = async (props: Event) => {
         )}
         <Link href={`/events/${props.event_id}`} className="w-full">
           {
-            !isRegisteredAlready ? <Button className="w-full">Join</Button> : <Button className="w-full">View Details</Button>
+            !isRegisteredAlready && !isEventOrganizer ? <Button className="w-full">Join</Button> : <Button className="w-full">View Details</Button>
           }
         </Link>
       </CardFooter>
