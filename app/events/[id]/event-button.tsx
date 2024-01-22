@@ -21,6 +21,7 @@ import { updateEventAction } from "@/lib/actions/events/updateEventAction";
 import { getRegistrant } from "@/lib/services/events/getRegistrant";
 import { registerToEventAction } from "@/lib/actions/events/registerToEventAction";
 import { unregisterFromEventAction } from "@/lib/actions/events/unregisterFromEventAction";
+import Link from "next/link";
 
 export const EventButton = async ({ event }: { event: Event }) => {
   const { getUser } = getKindeServerSession()
@@ -56,6 +57,9 @@ const RegisterButton = async ({ event_id, user_id }: { event_id: string; user_id
       {isRegisteredAlready ? (
         <div className="flex flex-col justify-start items-start gap-1">
           <p className="text-green-400">You are already registered for the Event</p>
+          <Link href={`/attendee/${event_id}/${user_id}`}>
+            <Button variant={"outline"}>Show QR</Button>
+          </Link>
           <UnregisterButton event_id={event_id} user_id={user_id} />
         </div>
       ) : (
