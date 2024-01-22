@@ -22,6 +22,7 @@ import { getRegistrant } from "@/lib/services/events/getRegistrant";
 import { registerToEventAction } from "@/lib/actions/events/registerToEventAction";
 import { unregisterFromEventAction } from "@/lib/actions/events/unregisterFromEventAction";
 import Link from "next/link";
+import dayjs from "dayjs";
 
 export const EventButton = async ({ event }: { event: Event }) => {
   const { getUser } = getKindeServerSession()
@@ -38,12 +39,16 @@ export const EventButton = async ({ event }: { event: Event }) => {
       isOrganizingOrg = true;
     }
   }
+
+  const isPresentDateAfterEndDate = dayjs().isAfter(event.end_date);
   return (
     <div>
       {isOrganizingOrg ? <div className="py-2 flex flex-col justify-start items-start gap-2">
         <EditButton event={event} />
         <DeleteButton event_id={event.event_id} />
-      </div> : <RegisterButton event_id={event.event_id} user_id={user?.id as string} />}
+      </div> : (
+        !isPresentDateAfterEndDate ? <RegisterButton event_id={event.event_id} user_id={user?.id as string} /> : <div className="bg-green-400 p-1 rounded-sm">The event is already completed</div>
+      )}
     </div>
   )
 }
