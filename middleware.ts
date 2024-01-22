@@ -18,5 +18,6 @@ export const config = {
     "/events",
     "/shop",
     "/events/:path*",
+    "/attendee/:path*",
   ],
 };

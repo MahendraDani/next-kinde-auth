@@ -18,21 +18,17 @@ interface AttendeePageParams {
 export default async function AttendeePage({ params }: AttendeePageParams) {
   const { getUser } = await getKindeServerSession()
   const visitingUser = await getUser();
-  // TODO
   // IF the organizer opens this page marks the user with user_id as present for that event (DATE constraints will be considered later)
   let registrant = await findUser(params.user_id);
   let event = await getEventById(params.event_id);
 
-  // const isOrg = await findOrg(params.user_id);
-  // let isOrganizingOrg = false;
-  // if (isOrg) {
-  //   if (
-  //     isOrg.data?.org_id === visitingUser?.id
-  //   ) {
-  //     isOrganizingOrg = true;
-  //     const markAttendenceOfRegistrant = await markAttendence({ event_id: params.event_id, user_id: params.user_id })
-  //   }
-  // }
+  if (!registrant || !event) {
+    return (
+      <div className="w-full h-[92vh] grid place-content-center">
+        <h1 className="text-7xl font-bold">OOps, You are not at the correct event ID and User ID URL</h1>
+      </div>
+    )
+  }
 
   const isOrganizingOrg = event?.organizer_id === visitingUser?.id;
   if (isOrganizingOrg) {
