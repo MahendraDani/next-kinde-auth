@@ -1,5 +1,6 @@
 import { LoginLink, LogoutLink, RegisterLink, getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Button } from "../ui/button"
+import Link from "next/link";
 
 export const Navbar = async () => {
   const { isAuthenticated } = getKindeServerSession()
@@ -10,7 +11,10 @@ export const Navbar = async () => {
         Logo
       </div>
       <div>{
-        isAuthed ? <div>
+        isAuthed ? <div className="flex justify-between items-center gap-2">
+          <Link href={"/events"}><Button variant={"ghost"}>Events</Button></Link>
+          <Link href={"/shop"}><Button variant={"ghost"}>Shop</Button></Link>
+          <Link href={"/profile"}><Button variant={"ghost"}>Profile</Button></Link>
           <Button><LogoutLink>Logout</LogoutLink></Button>
         </div> : <div className="flex justify-between gap-4 items-center">
           <Button variant={"outline"}>

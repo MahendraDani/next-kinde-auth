@@ -17,6 +17,7 @@ export const config = {
     "/onboard/org",
     "/events",
     "/shop",
+    "/profile",
     "/events/:path*",
     "/attendee/:path*",
   ],
