@@ -20,6 +20,7 @@ import { Event } from "@prisma/client";
 import { updateEventAction } from "@/lib/actions/events/updateEventAction";
 import { getRegistrant } from "@/lib/services/events/getRegistrant";
 import { registerToEventAction } from "@/lib/actions/events/registerToEventAction";
+import { unregisterFromEventAction } from "@/lib/actions/events/unregisterFromEventAction";
 
 export const EventButton = async ({ event }: { event: Event }) => {
   const { getUser } = getKindeServerSession()
@@ -52,7 +53,12 @@ const RegisterButton = async ({ event_id, user_id }: { event_id: string; user_id
   const isRegisteredAlready = await getRegistrant({ event_id, user_id });
   return (
     <div>
-      {isRegisteredAlready ? <p className="text-green-400">You are already registered for the Event</p> : (
+      {isRegisteredAlready ? (
+        <div className="flex flex-col justify-start items-start gap-1">
+          <p className="text-green-400">You are already registered for the Event</p>
+          <UnregisterButton event_id={event_id} user_id={user_id} />
+        </div>
+      ) : (
         <form action={registerToEventAction}>
           <Input name="event_id" className="hidden" value={event_id} />
           <Input name="user_id" className="hidden" value={user_id} />
@@ -60,6 +66,16 @@ const RegisterButton = async ({ event_id, user_id }: { event_id: string; user_id
         </form>
       )}
     </div>
+  )
+}
+
+const UnregisterButton = async ({ event_id, user_id }: { event_id: string, user_id: string }) => {
+  return (
+    <form action={unregisterFromEventAction}>
+      <Input className="hidden" name="event_id" value={event_id} />
+      <Input className="hidden" name="user_id" value={user_id} />
+      <Button type="submit" variant={"destructive"}>Un register</Button>
+    </form>
   )
 }
 const DeleteButton = async ({ event_id }: { event_id: string }) => {
