@@ -6,6 +6,7 @@ import { markAttendence } from "@/lib/services/events/markAttendance";
 import { findOrg } from "@/lib/services/org/findOrg";
 import { findUser } from "@/lib/services/user/findUser";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import dayjs from "dayjs";
 
 interface AttendeePageParams {
   params: {
@@ -32,7 +33,11 @@ export default async function AttendeePage({ params }: AttendeePageParams) {
 
   const isOrganizingOrg = event?.organizer_id === visitingUser?.id;
   if (isOrganizingOrg) {
-    await markAttendence({ event_id: params.event_id, user_id: params.user_id })
+    const isPresentDayAfterStartDate = dayjs().isAfter(dayjs(event.start_date));
+    const isPresentDayBeforeEndDate = dayjs().isBefore(dayjs(event.end_date));
+    if (isPresentDayAfterStartDate && isPresentDayBeforeEndDate) {
+      await markAttendence({ event_id: params.event_id, user_id: params.user_id })
+    }
   }
   return (
     <div className="w-full h-[92vh] grid place-content-center bg-gradient-to-br from-teal-200 via-yellow-100 to-purple-200">

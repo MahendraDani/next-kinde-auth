@@ -13,6 +13,7 @@ import Link from "next/link"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { getRegistrant } from "@/lib/services/events/getRegistrant"
 import { getEventOrganizerId } from "@/lib/services/events/getEventOrganizerId"
+import * as dayjs from 'dayjs';
 
 export const EventCard = async (props: Event) => {
 
