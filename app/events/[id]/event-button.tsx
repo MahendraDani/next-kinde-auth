@@ -23,6 +23,7 @@ import { registerToEventAction } from "@/lib/actions/events/registerToEventActio
 import { unregisterFromEventAction } from "@/lib/actions/events/unregisterFromEventAction";
 import Link from "next/link";
 import dayjs from "dayjs";
+import { markEventAsCompleted } from "@/lib/services/events/markEventCompleted";
 
 export const EventButton = async ({ event }: { event: Event }) => {
   const { getUser } = getKindeServerSession()
@@ -41,6 +42,7 @@ export const EventButton = async ({ event }: { event: Event }) => {
   }
 
   const isPresentDateAfterEndDate = dayjs().isAfter(event.end_date);
+  const markEventAsCompletedAutomatically = await markEventAsCompleted({ event_id: event.event_id })
   return (
     <div>
       {isOrganizingOrg ? <div className="py-2 flex flex-col justify-start items-start gap-2">
