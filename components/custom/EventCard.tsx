@@ -13,7 +13,7 @@ import Link from "next/link"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { getRegistrant } from "@/lib/services/events/getRegistrant"
 import { getEventOrganizerId } from "@/lib/services/events/getEventOrganizerId"
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 export const EventCard = async (props: Event) => {
 
@@ -26,6 +26,7 @@ export const EventCard = async (props: Event) => {
   })
   const eventOrganizerId = await getEventOrganizerId({ event_id: props.event_id })
   const isEventOrganizer = eventOrganizerId === user?.id;
+  const isPresentDayAfterEndDate = dayjs().isAfter(props.end_date);
   return (
     <Card className="w-[25rem]">
       <CardHeader>
@@ -44,6 +45,7 @@ export const EventCard = async (props: Event) => {
         </div>
       </CardContent>
       <CardFooter className="flex flex-col justify-start items-start gap-1">
+        {isPresentDayAfterEndDate && <p className="bg-green-400 p-1 rounded-sm w-full">The event is already completed</p>}
         {isRegisteredAlready && (
           <div>
             <p className="text-green-400 w-full text-center font-mono">Registered </p>
@@ -51,7 +53,7 @@ export const EventCard = async (props: Event) => {
         )}
         <Link href={`/events/${props.event_id}`} className="w-full">
           {
-            !isRegisteredAlready && !isEventOrganizer ? <Button className="w-full">Join</Button> : <Button className="w-full">View Details</Button>
+            !isRegisteredAlready && !isEventOrganizer && !isPresentDayAfterEndDate ? <Button className="w-full">Join</Button> : <Button className="w-full">View Details</Button>
           }
         </Link>
       </CardFooter>

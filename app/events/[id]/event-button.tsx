@@ -44,6 +44,7 @@ export const EventButton = async ({ event }: { event: Event }) => {
   return (
     <div>
       {isOrganizingOrg ? <div className="py-2 flex flex-col justify-start items-start gap-2">
+        {isPresentDateAfterEndDate && <p className="bg-green-400 p-1 rounded-sm">The event is already completed</p>}
         <EditButton event={event} />
         <DeleteButton event_id={event.event_id} />
       </div> : (
